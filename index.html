@@ -570,7 +570,7 @@
               id="password-input"
               class="lock-input"
               type="password"
-              placeholder="Password: Ocean"
+              placeholder="Password: "
             />
             <button id="unlock-btn" class="lock-btn">Нээх 💘</button>
           </div>
@@ -834,7 +834,7 @@ stage.addEventListener("mouseleave", () => {
     /* ==== LOCK PAGE – password шалгах ==== */
     function tryUnlock() {
       const value = (passwordInput.value || "").trim().toLowerCase();
-      if (value === "ocean") {
+      if (value === '0621') {
         lockError.textContent = "";
         lockPage.classList.remove("active");
         page1.classList.add("active");
