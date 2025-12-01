@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+  <meta charset="UTF-8" />
+  <title>To Ocean 💗</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      background: radial-gradient(circle at top, #ffb6c1, #ff5f6d, #ffc371);
+      background-size: 250% 250%;
+      animation: bgMove 18s ease-in-out infinite;
+      overflow: hidden;
+      color: #fff;
+    }
+
+    body.accepted {
+      background: radial-gradient(circle at center, #ffe1ff, #ff6fd8, #3813c2);
+      background-size: 260% 260%;
+      animation: bgMoveAccepted 18s ease-in-out infinite;
+    }
+
+    @keyframes bgMove {
+      0% { background-position: 0% 0%; }
+      50% { background-position: 100% 100%; }
+      100% { background-position: 0% 0%; }
+    }
+
+    @keyframes bgMoveAccepted {
+      0% { background-position: 0% 100%; }
+      50% { background-position: 100% 0%; }
+      100% { background-position: 0% 100%; }
+    }
+
+    .heart {
+      position: fixed;
+      bottom: -40px;
+      font-size: 24px;
+      opacity: 0.8;
+      animation: floatUp 6s linear infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) translateX(0) scale(0.8);
+        opacity: 0.9;
+      }
+      100% {
+        transform: translateY(-120vh) translateX(-40px) scale(1.4);
+        opacity: 0;
+      }
+    }
+
+    .wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 900px;
+      height: 100vh;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+    }
+
+    .page {
+      position: absolute;
+      inset: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transform: translateY(30px) scale(0.98);
+      pointer-events: none;
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .page.active {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+    .card {
+      max-width: 800px;
+      width: 100%;
+      padding: 26px 26px 30px;
+      border-radius: 26px;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.32);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -2px;
+      border-radius: 28px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.8), transparent);
+      opacity: 0.8;
+      z-index: -1;
+    }
+
+    .card-inner {
+      max-height: calc(100vh - 120px);
+      overflow-y: auto;
+      padding-right: 6px;
+    }
+
+    .tag {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      opacity: 0.85;
+      margin-bottom: 10px;
+    }
+
+    .to-title {
+      font-size: 30px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      background: linear-gradient(120deg, #ffffff, #ffe6ff, #ffbed8);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 16px rgba(255, 255, 255, 0.4);
+      position: relative;
+      display: inline-block;
+    }
+
+    .to-title::after {
+      content: "💌";
+      margin-left: 6px;
+      font-size: 26px;
+      animation: heartbeat 1.2s infinite;
+    }
+
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      30% { transform: scale(1.22); }
+    }
+
+    .divider {
+      width: 80px;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.7);
+      margin: 10px 0 18px;
+      border-radius: 999px;
+    }
+
+  .card-content {
+  display: grid;
+  grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.photo-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  position: sticky;
+  top: 10px;
+  max-width: 260px;
+}
+
+.carousel-3d {
+  width: 100%;
+  height: 150px;
+  position: relative;
+  perspective: 900px;
+
+  /* ШИНЭ: зургийг баганыхаа дотор нь барих */
+  overflow: hidden;
+  border-radius: 22px;
+}
+
+
+.carousel-3d-stage {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+}
+
+
+.carousel-3d-item {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 210px;
+  height: 140px;
+  margin-left: -105px;
+  border-radius: 22px;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.6);
+  transition: transform 0.6s ease, opacity 0.6s ease;
+  opacity: 0;
+
+  /* ШИНЭ: тексттэй давхардахгүйгээр өөрийнхөө хэсэгтээ үлдэнэ */
+  z-index: 1;
+}
+
+    .photo-caption {
+      font-size: 12px;
+      text-align: center;
+      opacity: 0.9;
+    }
+
+    .carousel-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .carousel-btn {
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.9);
+      background: rgba(0,0,0,0.22);
+      padding: 2px 10px;
+      font-size: 14px;
+      cursor: pointer;
+      color: #fff;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .carousel-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.35);
+    }
+
+    .dots {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.5);
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .dot.active {
+      background: #ffffff;
+      transform: scale(1.3);
+    }
+
+    .text-column {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    .paragraph {
+      font-size: 14px;
+      line-height: 1.9;
+      margin-bottom: 14px;
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeInUp 0.6s forwards;
+    }
+
+    .paragraph:nth-child(1) { animation-delay: 0.12s; }
+    .paragraph:nth-child(2) { animation-delay: 0.24s; }
+    .paragraph:nth-child(3) { animation-delay: 0.36s; }
+    .paragraph:nth-child(4) { animation-delay: 0.48s; }
+    .paragraph:nth-child(5) { animation-delay: 0.6s; }
+    .paragraph:nth-child(6) { animation-delay: 0.72s; }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .paragraph strong {
+      font-weight: 700;
+    }
+
+    .question-box {
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: rgba(0, 0, 0, 0.18);
+      border: 1px dashed rgba(255, 255, 255, 0.4);
+    }
+
+    .question {
+      font-size: 15px;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .hint {
+      font-size: 12px;
+      opacity: 0.85;
+      margin-bottom: 10px;
+    }
+
+    .buttons {
+      position: relative;
+      width: 100%;
+      margin-top: 6px;
+      min-height: 52px;
+    }
+
+    button {
+      border: none;
+      padding: 10px 22px;
+      border-radius: 999px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease,
+        background 0.18s ease, color 0.18s ease;
+      white-space: nowrap;
+    }
+
+    .btn-yes {
+      background: #ffffff;
+      color: #ff4b6e;
+      font-weight: 700;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.18);
+      margin-right: 10px;
+    }
+
+    .btn-yes:hover {
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 14px 26px rgba(0, 0, 0, 0.25);
+    }
+
+    .btn-no {
+      background: transparent;
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      font-weight: 500;
+      position: relative;
+    }
+
+    .btn-no:hover {
+      transform: translateY(-1px);
+    }
+
+    .footer-note {
+      margin-top: 14px;
+      font-size: 11px;
+      opacity: 0.75;
+    }
+
+    .footer-note span {
+      font-size: 12px;
+    }
+
+    .final-title {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .final-heart {
+      font-size: 40px;
+      text-align: center;
+      margin-bottom: 10px;
+      animation: heartbeat 1.3s infinite;
+    }
+
+    .final-text {
+      font-size: 14px;
+      line-height: 1.9;
+      text-align: center;
+      margin-bottom: 14px;
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .chip {
+      font-size: 11px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      background: rgba(0, 0, 0, 0.14);
+    }
+
+    .back-btn {
+      margin-top: 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 13px;
+      background: transparent;
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      padding: 8px 16px;
+    }
+
+    .back-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .lock-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .lock-sub {
+      font-size: 13px;
+      opacity: 0.9;
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .lock-form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .lock-input {
+      width: 100%;
+      max-width: 260px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.7);
+      background: rgba(0,0,0,0.15);
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .lock-input::placeholder {
+      color: rgba(255,255,255,0.6);
+    }
+
+    .lock-btn {
+      background: #ffffff;
+      color: #ff4b6e;
+      font-weight: 600;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.18);
+    }
+
+    .lock-error {
+      margin-top: 6px;
+      font-size: 12px;
+      color: #ffd1d1;
+      min-height: 16px;
+      text-align: center;
+    }
+
+    @media (max-width: 720px) {
+      .card {
+        padding: 20px 18px 22px;
+      }
+
+      .card-inner {
+        max-height: calc(100vh - 110px);
+      }
+
+      .to-title {
+        font-size: 24px;
+      }
+
+      .final-title {
+        font-size: 24px;
+      }
+
+      .btn-yes,
+      .btn-no {
+        padding: 8px 18px;
+        font-size: 13px;
+      }
+
+      .card-content {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .photo-column {
+        position: static;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Background hearts -->
+  <script>
+    function spawnBackgroundHeart() {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.textContent = "❤";
+
+      const startLeft = Math.random() * 100;
+      heart.style.left = startLeft + "vw";
+      heart.style.animationDuration = 4 + Math.random() * 4 + "s";
+      heart.style.fontSize = 18 + Math.random() * 18 + "px";
+
+      document.body.appendChild(heart);
+
+      setTimeout(() => {
+        heart.remove();
+      }, 8000);
+    }
+
+    setInterval(spawnBackgroundHeart, 1000);
+  </script>
+
+  <main class="wrapper">
+    <!-- LOCK PAGE – password Ocean -->
+    <section id="lock-page" class="page active">
+      <div class="card">
+        <div class="card-inner" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;">
+          <div class="tag">Нууц хайртын хуудас 🔐</div>
+          <h2 class="lock-title">Ocean-д зориулсан тусгай зай</h2>
+          <p class="lock-sub">
+            Хэрвээ чи жинхэнэ Ocean бол доор нэрээ бичээд, хайрын ертөнц рүүгээ орно уу. 💖
+          </p>
+          <div class="lock-form">
+            <input
+              id="password-input"
+              class="lock-input"
+              type="password"
+              placeholder="Password: Ocean"
+            />
+            <button id="unlock-btn" class="lock-btn">Нээх 💘</button>
+          </div>
+          <div id="lock-error" class="lock-error"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE 1 – love text + 3D CAROUSEL -->
+    <section id="page1" class="page">
+      <div class="card">
+        <div class="card-inner">
+          <div class="tag">Зөвхөн нэг хүнд — Ocean-д 💫</div>
+          <h1 class="to-title">To Ocean</h1>
+          <div class="divider"></div>
+
+          <div class="card-content">
+            <!-- Зүүн тал: 3D carousel -->
+            <div class="photo-column">
+              <div class="carousel-3d">
+                <div class="carousel-3d-stage" id="carousel-3d-stage"></div>
+              </div>
+
+              <div class="carousel-controls">
+                <button class="carousel-btn" id="prev-photo">⟨</button>
+                <div class="dots" id="carousel-dots"></div>
+                <button class="carousel-btn" id="next-photo">⟩</button>
+              </div>
+
+              <div class="photo-caption">
+                Хөгширтлөө хамт байх гэж мөрөөддөг<br />бид хоёрын жижигхэн мөчүүд. 📸
+              </div>
+            </div>
+
+            <!-- Баруун талын текст -->
+            <div class="text-column">
+              <p class="paragraph">
+                Чамдаа би <strong>маш их хайртай</strong>. Чи бол миний бүх зүйл, чиний
+                ачаар хайр нь хайр гэдэг зүйлийг өдөр бүр мэдэрдэг. Чамтайгаа ярилцаж
+                өнгөрүүлсэн тэр шөнүүд нүд ирмэхийн дотор нар мандаж өглөө болсон байдаг.
+              </p>
+
+              <p class="paragraph">
+                Instagram дээр reel үзэх болгонд хөгширтлөө үерхсэн хосуудын reel
+                гарах болгонд л чамтайгаа <strong>буурал болтлоо хамт байх юмсан</strong>
+                гэж төсөөлөн зүрх дардаг.
+              </p>
+
+              <p class="paragraph">
+                Өхөөрдөм чамайгаа хараал баймаар байдаг, би чамаас нүдээ салгамааргүй
+                байдаг. Чамайгаа харах болгондоо харц минь чам дээр гацчихдаг. Чи миний
+                харцны төгсгөл, зүрхний минь эхлэл шүү.
+              </p>
+
+              <p class="paragraph">
+                Даан ч чамайгаа заримдаа гомдоогоод, тэгээд аргадаж чадахгүйгээсээ болж
+                бүр л гомдоогоод байдаг. Уг нь хайр нь чамдаа
+                <strong>хэнээс ч илүү хайртай</strong>, хэнээс ч илүү чамтайгаа хамт байхыг
+                хүсдэг.
+              </p>
+
+              <p class="paragraph">
+                Хайр нь чамайг ажил хийлгэхгүй байлгаж зүгээр л хичээлээ сайн хийгээд,
+                өөрийнхөө биеийг бодоод байлгахыг л хүсдэг. Бусдыг нь би бүгдийг нь хийж
+                өгөөд, чамайгаа халамжилмаар байдаг. Чамдаа маш их хайртай. Чинийхээ
+                инээд, хөгжилтэй байдалд би бүр <strong>гүн дурлачихсан</strong>.
+              </p>
+
+              <p class="paragraph">
+                Чи минь миний харанхуй бүрэнхий байдлыг гэрэлтүүлж, надад гэрэл гэгээ
+                авчирдаг. Чи минь миний ирээдүйн гэрэл гэгээ. Би ч энэ гэрлийг
+                <strong>хэзээ ч унтраахгүй</strong> авч явах болноо. Чи минь миний хамгийн
+                хайртай, хамгийн гайхалтай хүн. Би чамдаа маш их хайртай, чи минь миний
+                бүх зүйл. 💖
+              </p>
+
+              <div class="question-box">
+                <div class="question">Тэгэхээр... намайг уучилсан уу, Ocean минь? 🥺</div>
+                <div class="hint">
+                  (No-г дарахаар чамайг орхихгүй, чамаас л зугтдаг жижигхэн товч байгаа шүү 😜)
+                </div>
+
+                <div class="buttons">
+                  <button id="yes-btn" class="btn-yes">
+                    Тийм ээ, уучиллаа 💗
+                  </button>
+                  <button id="no-btn" class="btn-no">
+                    Үгүй ээ 😈
+                  </button>
+                </div>
+              </div>
+
+              <div class="footer-note">
+                <span>
+                  💫 Чи "Тийм ээ" гэж дарсан мөчөөс эхлээд хайр нь Ocean-тойгоо буурал
+                  болтол хамт байх мөрөөдлөө улам чанга тэврээд явна.
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE 2 – YES дарсны дараах хэсэг -->
+    <section id="page2" class="page">
+      <div class="card">
+        <div class="card-inner" style="text-align:center;">
+          <div class="final-heart">💖</div>
+          <h2 class="final-title">Баярлалаа, Ocean минь ✨</h2>
+          <div class="divider" style="margin: 8px auto 14px;"></div>
+
+          <p class="final-text">
+            Чи намайг уучиллаа гэж бодохоор л бүх зүйл илүү гэрэлтэй, илүү дулаахан
+            санагдаж байна. Чамайг дахиж гомдоохгүйг би
+            <strong>зүрх сэтгэлээрээ амлаж байна</strong>.
+          </p>
+
+          <p class="final-text">
+            Чи миний бүх reel дээр төсөөлдөг ирээдүй, миний буурал болтлоо хамт баймаар
+            хүн, миний өдөр бүрийн инээмсэглэл. Чи байгаа болохоор л хайр нь
+            хүчтэй байж чаддаг. Чи минь миний гэрэл, би тэр гэрлийг чинь насан туршдаа
+            хамгаалж явах болно. 🥹🌙
+          </p>
+
+          <p class="final-text">
+            Хайр нь чамайг хөтлөөд, халамжлаад, ажлыг чинь би хийчихмээр санагдсан ч
+            хамгийн түрүүнд чиний <strong>эрүүл мэнд, мөрөөдөл, ирээдүй</strong>-г чинь
+            дэмжээд, хамтдаа сайхан амьдралыг бүтээнэ.
+          </p>
+
+          <div class="chip-row">
+            <div class="chip">💍 Буурал болтол хамт</div>
+            <div class="chip">🎧 Шөнө дунд ярьсаар өглөө болдог бид</div>
+            <div class="chip">📚 Хичээл дээр нь найз залуу нь дэмждэг</div>
+            <div class="chip">💡 Ирээдүйн гэрэл гэгээ — Ocean</div>
+          </div>
+
+          <button id="back-btn" class="back-btn">
+            ← Дахиад уншиж хайрлуулах 😌
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const yesBtn = document.getElementById("yes-btn");
+    const noBtn = document.getElementById("no-btn");
+    const buttonsContainer = document.querySelector(".buttons");
+    const page1 = document.getElementById("page1");
+    const page2 = document.getElementById("page2");
+    const backBtn = document.getElementById("back-btn");
+    const lockPage = document.getElementById("lock-page");
+    const passwordInput = document.getElementById("password-input");
+    const unlockBtn = document.getElementById("unlock-btn");
+    const lockError = document.getElementById("lock-error");
+
+    /* ==== 3D CAROUSEL ЗУРАГУУДЫГ ТОХИРУУЛАХ ==== */
+    const carouselImages = [
+      "photo1.jpg",
+      "photo2.jpg",
+      "photo3.jpg",
+      "photo4.jpg"
+    ];
+
+    const stage = document.getElementById("carousel-3d-stage");
+    const dotsContainer = document.getElementById("carousel-dots");
+    const prevBtn = document.getElementById("prev-photo");
+    const nextBtn = document.getElementById("next-photo");
+
+    let currentIndex = 0;
+    let carouselTimer;
+
+    function createSlides() {
+      stage.innerHTML = "";
+      carouselImages.forEach((src) => {
+        const item = document.createElement("div");
+        item.className = "carousel-3d-item";
+        item.style.backgroundImage = `url(${src})`;
+        stage.appendChild(item);
+      });
+    }
+
+    function renderDots() {
+      dotsContainer.innerHTML = "";
+      carouselImages.forEach((_, idx) => {
+        const dot = document.createElement("div");
+        dot.className = "dot" + (idx === currentIndex ? " active" : "");
+        dot.addEventListener("click", () => {
+          goToIndex(idx, true);
+        });
+        dotsContainer.appendChild(dot);
+      });
+    }
+
+    function update3D() {
+      const items = stage.querySelectorAll(".carousel-3d-item");
+      const total = items.length;
+      items.forEach((item, idx) => {
+        let offset = idx - currentIndex;
+
+        if (offset > total / 2) offset -= total;
+        if (offset < -total / 2) offset += total;
+
+        const abs = Math.abs(offset);
+        let x = offset * 120;
+        let z = 150 - abs * 60;
+        let rotateY = offset * -25;
+        let opacity = abs > 2 ? 0 : 1 - abs * 0.2;
+
+        item.style.transform =
+          `translateX(${x}px) translateZ(${z}px) rotateY(${rotateY}deg)`;
+        item.style.opacity = opacity;
+        item.style.zIndex = String(100 - abs);
+      });
+
+      renderDots();
+    }
+
+    function goToIndex(idx, resetTimer = false) {
+      const total = carouselImages.length;
+      currentIndex = (idx + total) % total;
+      update3D();
+      if (resetTimer) resetCarouselTimer();
+    }
+
+    function nextImage() {
+      goToIndex(currentIndex + 1);
+    }
+
+    function prevImage() {
+      goToIndex(currentIndex - 1, true);
+    }
+
+    function resetCarouselTimer() {
+      if (carouselTimer) clearInterval(carouselTimer);
+      carouselTimer = setInterval(nextImage, 3500);
+    }
+
+    if (carouselImages.length > 0) {
+      createSlides();
+      update3D();
+      resetCarouselTimer();
+    }
+
+    prevBtn.addEventListener("click", () => prevImage());
+    nextBtn.addEventListener("click", () => {
+      goToIndex(currentIndex + 1, true);
+    });
+
+    /* ==== LOVE CONFETTI – YES hearts ==== */
+    function spawnYesHearts() {
+      if (!yesBtn) return;
+      const rect = yesBtn.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const bottomFromTop = window.innerHeight - rect.top;
+
+      for (let i = 0; i < 14; i++) {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.textContent = "💖";
+        heart.style.left = centerX + (Math.random() * 120 - 60) + "px";
+        heart.style.bottom = bottomFromTop + (Math.random() * 20 - 10) + "px";
+        heart.style.animationDuration = 3 + Math.random() * 2 + "s";
+        heart.style.fontSize = 16 + Math.random() * 10 + "px";
+        document.body.appendChild(heart);
+
+        setTimeout(() => heart.remove(), 5000);
+      }
+    }
+
+    /* ==== LOCK PAGE – password шалгах ==== */
+    function tryUnlock() {
+      const value = (passwordInput.value || "").trim().toLowerCase();
+      if (value === "ocean") {
+        lockError.textContent = "";
+        lockPage.classList.remove("active");
+        page1.classList.add("active");
+        spawnYesHearts(); // нээгдэхэд жаахан зүрхэн confetti
+      } else {
+        lockError.textContent = "Жижигхэн hint: Ocean гэж бичих гээд үз дээ 😌";
+      }
+    }
+
+    unlockBtn.addEventListener("click", tryUnlock);
+    passwordInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        tryUnlock();
+      }
+    });
+
+    /* ==== NO товч – зугтдаг ==== */
+    function moveNoButton() {
+      const containerRect = buttonsContainer.getBoundingClientRect();
+      const btnRect = noBtn.getBoundingClientRect();
+
+      const maxLeft = containerRect.width - btnRect.width;
+      const maxTop = containerRect.height - btnRect.height;
+
+      const randomLeft = Math.random() * maxLeft;
+      const randomTop = Math.random() * maxTop;
+
+      buttonsContainer.style.position = "relative";
+      noBtn.style.position = "absolute";
+      noBtn.style.left = randomLeft + "px";
+      noBtn.style.top = randomTop + "px";
+    }
+
+    let noHoverCount = 0;
+
+    function handleNoHover() {
+      noHoverCount++;
+      moveNoButton();
+
+      if (noHoverCount > 3) {
+        noBtn.textContent = "Чадахгүй ээ 😝";
+      } else if (noHoverCount > 1) {
+        noBtn.textContent = "Болохгүй ш дээ 😂";
+      }
+    }
+
+    if (noBtn) {
+      noBtn.addEventListener("mouseenter", handleNoHover);
+      noBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        moveNoButton();
+      });
+    }
+
+    /* ==== YES товч – 2-р хуудас руу шилжих ==== */
+    if (yesBtn) {
+      yesBtn.addEventListener("click", () => {
+        document.body.classList.add("accepted");
+        spawnYesHearts();
+        page1.classList.remove("active");
+        page2.classList.add("active");
+      });
+    }
+
+    /* ==== BACK товч – буцаад 1-р хуудас руу ==== */
+    if (backBtn) {
+      backBtn.addEventListener("click", () => {
+        page2.classList.remove("active");
+        page1.classList.add("active");
+        // Хүсвэл background-ийг хэвээр нь хадгалах эсвэл ингэж салгаж болно:
+        // document.body.classList.remove("accepted");
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+  <meta charset="UTF-8" />
+  <title>Уучлаарай, хайрт минь 💗</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at top, #ffb6c1, #ff5f6d, #ffc371);
+      overflow: hidden;
+      color: #fff;
+    }
+
+    /* Хөөрхөн зүрхэн анимэйшнүүд */
+    .heart {
+      position: fixed;
+      bottom: -40px;
+      font-size: 24px;
+      opacity: 0.8;
+      animation: floatUp 6s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) translateX(0) scale(0.8);
+        opacity: 0.9;
+      }
+      100% {
+        transform: translateY(-120vh) translateX(-40px) scale(1.4);
+        opacity: 0;
+      }
+    }
+
+    .card {
+      position: relative;
+      max-width: 420px;
+      width: 90%;
+      padding: 28px 24px 32px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -2px;
+      border-radius: 26px;
+      background: linear-gradient(135deg, #ffe0f0, transparent);
+      opacity: 0.6;
+      z-index: -1;
+    }
+
+    .small-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      margin-bottom: 8px;
+      opacity: 0.9;
+    }
+
+    h1 {
+      font-size: 26px;
+      margin-bottom: 12px;
+    }
+
+    h1 span {
+      font-size: 28px;
+    }
+
+    .divider {
+      width: 80px;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.7);
+      margin: 10px auto 18px;
+      border-radius: 999px;
+    }
+
+    .main-text {
+      font-size: 14px;
+      line-height: 1.7;
+      margin-bottom: 20px;
+      opacity: 0.95;
+    }
+
+    .main-text strong {
+      font-weight: 700;
+    }
+
+    .question {
+      font-size: 15px;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .hint {
+      font-size: 12px;
+      opacity: 0.8;
+      margin-bottom: 18px;
+    }
+
+    .buttons {
+      position: relative;
+      width: 100%;
+      margin: 10px auto 0;
+      min-height: 52px;
+    }
+
+    button {
+      border: none;
+      padding: 10px 22px;
+      border-radius: 999px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease,
+        background 0.18s ease, color 0.18s ease;
+      white-space: nowrap;
+    }
+
+    .btn-yes {
+      background: #ffffff;
+      color: #ff4b6e;
+      font-weight: 700;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.18);
+      margin-right: 10px;
+    }
+
+    .btn-yes:hover {
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 14px 26px rgba(0, 0, 0, 0.25);
+    }
+
+    .btn-no {
+      background: transparent;
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      font-weight: 500;
+      position: relative;
+    }
+
+    .btn-no:hover {
+      transform: translateY(-1px);
+    }
+
+    .hidden-message {
+      margin-top: 18px;
+      font-size: 14px;
+      line-height: 1.6;
+      opacity: 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: opacity 0.4s ease, max-height 0.4s ease, margin-top 0.4s ease;
+    }
+
+    .hidden-message.show {
+      opacity: 1;
+      max-height: 200px;
+      margin-top: 22px;
+    }
+
+    .hidden-message strong {
+      font-weight: 700;
+    }
+
+    .footer-note {
+      margin-top: 16px;
+      font-size: 11px;
+      opacity: 0.75;
+    }
+
+    .footer-note span {
+      font-size: 13px;
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 22px;
+      }
+      h1 span {
+        font-size: 24px;
+      }
+      .card {
+        padding: 22px 18px 26px;
+      }
+      .btn-yes,
+      .btn-no {
+        padding: 8px 18px;
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Давтагдах зүрхнүүд -->
+  <script>
+    // Background hearts
+    function spawnBackgroundHeart() {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.textContent = "❤";
+
+      const startLeft = Math.random() * 100;
+      heart.style.left = startLeft + "vw";
+      heart.style.animationDuration = 4 + Math.random() * 4 + "s";
+      heart.style.fontSize = 18 + Math.random() * 18 + "px";
+
+      document.body.appendChild(heart);
+
+      setTimeout(() => {
+        heart.remove();
+      }, 8000);
+    }
+
+    setInterval(spawnBackgroundHeart, 1000);
+  </script>
+
+  <div class="card">
+    <div class="small-label">Зөвхөн чамд зориуллаа 💌</div>
+    <h1>Уучлаарай, хайрт минь <span>💖</span></h1>
+    <div class="divider"></div>
+
+    <p class="main-text">
+      <strong>Чамайг гомдоосондоо үнэхээр их харамсаж байна.</strong><br />
+      Алдаа гаргасан ч, чамд минь байгаа хайрыг минь хором ч багасгаагүйг ойлгоосой гэж
+      хүсэж байна. Чамгүйгээр өдөр бүр дутуу, чамайг инээж байгааг харахгүй бол
+      сэтгэл минь хоосон юм шиг санагддаг.
+      <br /><br />
+      Надад дахиад нэг боломж өгч,
+      <strong>хамгийн их хайртай хүн нь байсаар байхыг</strong> минь зөвшөөрөөч?
+    </p>
+
+    <div class="question">Намайг уучилсан уу? 🥺</div>
+    <div class="hint">(No дарж үзвэл миний зүрх зугтаад байх шиг... 😉)</div>
+
+    <div class="buttons">
+      <button id="yes-btn" class="btn-yes">Тийм ээ, уучиллаа 💗</button>
+      <button id="no-btn" class="btn-no">Үгүй 😈</button>
+    </div>
+
+    <div id="hidden-message" class="hidden-message">
+      <strong>Баярлалаа хайр аа! 💘</strong><br />
+      Чамайг уучиллаа гэж бодохоор л бүх зүйл илүү гэрэлтэй харагдаж байна.
+      Чамайг дахиж гомдоохгүйг амлаж байна. Хамтдаа илүү сайхан дурсамжуудыг
+      бүтээцгээе. Чи миний <strong>хамгийн том аз жаргал</strong>.
+    </div>
+
+    <div class="footer-note">
+      <span>💫 Чи "Тийм ээ" гэж дарсан мөчөөс хойш миний ертөнц бүрэн болсон.</span>
+    </div>
+  </div>
+
+  <script>
+    const yesBtn = document.getElementById("yes-btn");
+    const noBtn = document.getElementById("no-btn");
+    const hiddenMessage = document.getElementById("hidden-message");
+    const buttonsContainer = document.querySelector(".buttons");
+
+    // No товчийг зугтаалгадаг функц
+    function moveNoButton() {
+      const containerRect = buttonsContainer.getBoundingClientRect();
+      const btnRect = noBtn.getBoundingClientRect();
+
+      const maxLeft = containerRect.width - btnRect.width;
+      const maxTop = containerRect.height - btnRect.height;
+
+      const randomLeft = Math.random() * maxLeft;
+      const randomTop = Math.random() * maxTop;
+
+      buttonsContainer.style.position = "relative";
+      noBtn.style.position = "absolute";
+      noBtn.style.left = randomLeft + "px";
+      noBtn.style.top = randomTop + "px";
+    }
+
+    // Хулгана ойрохоор зугтана
+    noBtn.addEventListener("mouseenter", moveNoButton);
+    // Гар утас, click гэхэд ч бас зугтахаар
+    noBtn.addEventListener("click", moveNoButton);
+
+    // YES товчийг дарвал нууц мессеж + зүрхэн confetti
+    yesBtn.addEventListener("click", () => {
+      hiddenMessage.classList.add("show");
+      spawnYesHearts();
+    });
+
+    function spawnYesHearts() {
+      for (let i = 0; i < 18; i++) {
+        setTimeout(() => {
+          const heart = document.createElement("div");
+          heart.className = "heart";
+          heart.textContent = "💖";
+          const startLeft = 20 + Math.random() * 60;
+          heart.style.left = startLeft + "vw";
+          heart.style.animationDuration = 3 + Math.random() * 3 + "s";
+          heart.style.fontSize = 20 + Math.random() * 10 + "px";
+          document.body.appendChild(heart);
+          setTimeout(() => heart.remove(), 7000);
+        }, i * 80);
+      }
+    }
+  </script>
+</body>
+</html>
